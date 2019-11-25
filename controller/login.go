@@ -7,16 +7,12 @@ func loginHandleFunc(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		postLogin(w, r)
 	case http.MethodDelete:
-		deleteLogin(w, r)
+		fallthrough // TODO implement
 	default:
 		// TODO error
 	}
 }
 
 func postLogin(w http.ResponseWriter, r *http.Request) {
-	// TODO implement
-}
-
-func deleteLogin(w http.ResponseWriter, r *http.Request) {
 	// TODO implement
 }
