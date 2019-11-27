@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"strings"
 	"testing"
 
 	"github.com/dgravesa/AuthenticationServer/data"
@@ -27,12 +26,35 @@ func newPostUserRequest(in postUserInput) *http.Request {
 		f.Set("password", in.upass)
 	}
 
-	return httptest.NewRequest("POST", "http://localhost/user", strings.NewReader(f.Encode()))
+	req := httptest.NewRequest("POST", "http://localhost/user", nil)
+	req.Form = f
+	return req
 }
 
 var postUserValidRequestInput = []postUserInput{
 	{1, "password1"},
 	{2121, "$#!_&*()<>"},
+}
+
+func validatePostUserResponse(in postUserInput, expectedCode, receivedCode int, t *testing.T) {
+	var uidStr, upassStr string
+
+	if in.uid != 0 {
+		uidStr = fmt.Sprintf("%d", in.uid)
+	} else {
+		uidStr = "<empty>"
+	}
+
+	if in.upass != "" {
+		upassStr = fmt.Sprintf("\"%s\"", in.upass)
+	} else {
+		upassStr = "<empty>"
+	}
+
+	if receivedCode != expectedCode {
+		t.Errorf("expected status code = %d, received status code = %d [userid = %s, password = %s]",
+			expectedCode, receivedCode, uidStr, upassStr)
+	}
 }
 
 func Test_postUser_WithValidRequest_ReturnsSuccess(t *testing.T) {
@@ -48,10 +70,7 @@ func Test_postUser_WithValidRequest_ReturnsSuccess(t *testing.T) {
 		postUser(res, req)
 
 		// Assert
-		if res.Code != expectedCode {
-			t.Errorf("expected status code = %d, received status code = %d [userid = %d, password = \"%s\"]",
-				expectedCode, res.Code, in.uid, in.upass)
-		}
+		validatePostUserResponse(in, expectedCode, res.Code, t)
 	}
 }
 
@@ -59,36 +78,49 @@ func Test_postUser_MissingUserIDField_ReturnsBadRequest(t *testing.T) {
 	// Arrange
 	expectedCode := http.StatusBadRequest
 	model.SetDataLayer(data.NewInMemoryLayer())
-	// req := httptest.NewRequest("POST", "http://localhost/user", nil)
-	// req.Form.Add("password", "password1")
-	req := newPostUserRequest(postUserInput{0, "password1"})
+	in := postUserInput{0, "password1"}
+	req := newPostUserRequest(in)
 	res := httptest.NewRecorder()
 
 	// Act
 	postUser(res, req)
 
 	// Assert
-	if res.Code != expectedCode {
-		t.Errorf("expected status code = %d, received status code = %d [userid = <empty>, password = \"password1\"]",
-			expectedCode, res.Code)
-	}
+	validatePostUserResponse(in, expectedCode, res.Code, t)
 }
 
 func Test_postUser_MissingPasswordField_ReturnsBadRequest(t *testing.T) {
 	// Arrange
 	expectedCode := http.StatusBadRequest
 	model.SetDataLayer(data.NewInMemoryLayer())
-	// req := httptest.NewRequest("POST", "http://localhost/user", nil)
-	// req.Form.Add("userid", fmt.Sprintf("%d", 100))
-	req := newPostUserRequest(postUserInput{101, ""})
+	in := postUserInput{101, ""}
+	req := newPostUserRequest(in)
 	res := httptest.NewRecorder()
 
 	// Act
 	postUser(res, req)
 
 	// Assert
-	if res.Code != expectedCode {
-		t.Errorf("expected status code = %d, received status code = %d [userid = 101, password = <empty>]",
-			expectedCode, res.Code)
-	}
+	validatePostUserResponse(in, expectedCode, res.Code, t)
+}
+
+func Test_postUser_ExistingUserID_ReturnsForbidden(t *testing.T) {
+	// Arrange
+	expectedCode1 := http.StatusCreated
+	expectedCode2 := http.StatusForbidden
+	model.SetDataLayer(data.NewInMemoryLayer())
+	in1 := postUserInput{174, "password1"}
+	in2 := postUserInput{174, "password2"}
+	req1 := newPostUserRequest(in1)
+	req2 := newPostUserRequest(in2)
+	res1 := httptest.NewRecorder()
+	res2 := httptest.NewRecorder()
+
+	// Act
+	postUser(res1, req1)
+	postUser(res2, req2)
+
+	// Assert
+	validatePostUserResponse(in1, expectedCode1, res1.Code, t)
+	validatePostUserResponse(in2, expectedCode2, res2.Code, t)
 }
