@@ -2,8 +2,8 @@ package model
 
 // DataLayer is the interfacing layer between model logic and persistent data.
 type DataLayer interface {
-	AddUser(u UserLogin)
-	DeleteUser(uid uint64)
+	AddUserRecord(u UserRecord)
+	DeleteUserRecord(uid uint64)
 	UIDExists(uid uint64) bool
 }
 

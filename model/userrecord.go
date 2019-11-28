@@ -2,9 +2,9 @@ package model
 
 // UserRecord contains information stored in the data for authenticating a user.
 type UserRecord struct {
-	uid  uint64
-	salt string
-	hash string
+	ID   uint64
+	Salt string
+	Hash string
 }
 
 func makeUserRecord(ul UserLogin) UserRecord {
