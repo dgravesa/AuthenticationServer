@@ -70,6 +70,9 @@ func Test_postUser_WithValidRequest_ReturnsSuccess(t *testing.T) {
 		postUser(res, req)
 
 		// Assert
+		if !model.UIDExists(in.uid) {
+			t.Errorf("posted userid (%d) does not exist in data", in.uid)
+		}
 		validatePostUserResponse(in, expectedCode, res.Code, t)
 	}
 }
