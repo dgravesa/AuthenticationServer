@@ -38,5 +38,19 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
-	// TODO implement
+	uid, err := model.ParseUID(&r.Form)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		// TODO respond with error message
+		return
+	}
+
+	if !model.UIDExists(uid) {
+		w.WriteHeader(http.StatusNotFound)
+		// TODO respond with error message
+	} else {
+		model.DeleteUser(uid)
+		w.WriteHeader(http.StatusOK)
+	}
 }

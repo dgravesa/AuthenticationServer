@@ -1,28 +1,33 @@
 package data
 
-import "github.com/dgravesa/AuthenticationServer/model"
+import (
+	"github.com/dgravesa/AuthenticationServer/model"
+)
 
 // InMemoryLayer provides a data store in memory.
 type InMemoryLayer struct {
-	users []model.User
+	users map[uint64]model.User
 }
 
 // NewInMemoryLayer returns a new InMemoryLayer.
 func NewInMemoryLayer() *InMemoryLayer {
-	return new(InMemoryLayer)
+	layer := new(InMemoryLayer)
+	layer.users = make(map[uint64]model.User)
+	return layer
 }
 
 // AddUser adds a user to the data.
 func (l *InMemoryLayer) AddUser(u model.User) {
-	l.users = append(l.users, u)
+	l.users[u.ID] = u
+}
+
+// DeleteUser removes a user from the data.
+func (l *InMemoryLayer) DeleteUser(uid uint64) {
+	delete(l.users, uid)
 }
 
 // UIDExists returns true if the questioned uid exists as a record in this data layer, otherwise false.
 func (l *InMemoryLayer) UIDExists(uid uint64) bool {
-	for _, u := range l.users {
-		if u.ID == uid {
-			return true
-		}
-	}
-	return false
+	_, exists := l.users[uid]
+	return exists
 }

@@ -17,11 +17,8 @@ func ParseUser(v *url.Values) (User, error) {
 	var u User
 	var err error
 
-	if v == nil {
-		return User{}, fmt.Errorf("No form data given")
-	}
-
-	if u.ID, err = strconv.ParseUint(v.Get("userid"), 10, 64); err != nil {
+	// also errors in case of nil url values
+	if u.ID, err = ParseUID(v); err != nil {
 		return User{}, err
 	}
 
@@ -30,4 +27,20 @@ func ParseUser(v *url.Values) (User, error) {
 	}
 
 	return u, nil
+}
+
+// ParseUID extracts a user ID from http request form values.
+func ParseUID(v *url.Values) (uint64, error) {
+	var uid uint64
+	var err error
+
+	if v == nil {
+		return 0, fmt.Errorf("No form data given")
+	}
+
+	if uid, err = strconv.ParseUint(v.Get("userid"), 10, 64); err != nil {
+		return 0, err
+	}
+
+	return uid, nil
 }
