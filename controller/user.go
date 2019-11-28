@@ -32,7 +32,7 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		// TODO respond with error message
 	} else {
-		model.AddUser(user)
+		model.AddUserLogin(user)
 		w.WriteHeader(http.StatusCreated)
 	}
 }
@@ -50,7 +50,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		// TODO respond with error message
 	} else {
-		model.DeleteUser(uid)
+		model.DeleteUserLogin(uid)
 		w.WriteHeader(http.StatusOK)
 	}
 }

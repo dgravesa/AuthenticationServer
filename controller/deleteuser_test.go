@@ -48,8 +48,8 @@ func Test_deleteUser_OnExistingUser_ReturnsSuccess(t *testing.T) {
 	var uidToDelete uint64 = 4765
 	var uidToPersist uint64 = 5167
 	model.SetDataLayer(data.NewInMemoryLayer())
-	model.AddUser(model.UserLogin{uidToDelete, "Password1"})
-	model.AddUser(model.UserLogin{uidToPersist, "Password2"})
+	model.AddUserLogin(model.UserLogin{uidToDelete, "Password1"})
+	model.AddUserLogin(model.UserLogin{uidToPersist, "Password2"})
 	if !model.UIDExists(uidToDelete) {
 		t.Fatalf("failed to add deletable uid prior to test")
 	}
@@ -79,7 +79,7 @@ func Test_deleteUser_OnNonexistentUser_ReturnsNotFound(t *testing.T) {
 	var uidToPersist uint64 = 151899
 	var uidToDelete uint64 = 444125
 	model.SetDataLayer(data.NewInMemoryLayer())
-	model.AddUser(model.UserLogin{uidToPersist, "PasswordExistingUser"})
+	model.AddUserLogin(model.UserLogin{uidToPersist, "PasswordExistingUser"})
 	if !model.UIDExists(uidToPersist) {
 		t.Fatalf("failed to add persistent uid prior to test")
 	}

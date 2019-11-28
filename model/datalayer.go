@@ -13,18 +13,3 @@ var dataLayer DataLayer
 func SetDataLayer(l DataLayer) {
 	dataLayer = l
 }
-
-// AddUser adds a user to the data.
-func AddUser(u UserLogin) {
-	dataLayer.AddUser(u)
-}
-
-// DeleteUser removes the user associated with the ID from the data.
-func DeleteUser(uid uint64) {
-	dataLayer.DeleteUser(uid)
-}
-
-// UIDExists returns true if the questioned UID already exists in the data.
-func UIDExists(uid uint64) bool {
-	return dataLayer.UIDExists(uid)
-}
