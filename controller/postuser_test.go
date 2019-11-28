@@ -107,10 +107,10 @@ func Test_postUser_MissingPasswordField_ReturnsBadRequest(t *testing.T) {
 	validatePostUserResponse(in, expectedCode, res.Code, t)
 }
 
-func Test_postUser_ExistingUserID_ReturnsForbidden(t *testing.T) {
+func Test_postUser_ExistingUserID_ReturnsConflict(t *testing.T) {
 	// Arrange
 	expectedCode1 := http.StatusCreated
-	expectedCode2 := http.StatusForbidden
+	expectedCode2 := http.StatusConflict
 	model.SetDataLayer(data.NewInMemoryLayer())
 	in1 := postUserInput{174, "password1"}
 	in2 := postUserInput{174, "password2"}

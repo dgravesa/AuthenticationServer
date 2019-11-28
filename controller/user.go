@@ -29,7 +29,7 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if model.UIDExists(user.ID) {
-		w.WriteHeader(http.StatusForbidden)
+		w.WriteHeader(http.StatusConflict)
 		// TODO respond with error message
 	} else {
 		model.AddUserLogin(user)
