@@ -6,18 +6,18 @@ import (
 
 // InMemoryLayer provides a data store in memory.
 type InMemoryLayer struct {
-	users map[uint64]model.User
+	users map[uint64]model.UserLogin
 }
 
 // NewInMemoryLayer returns a new InMemoryLayer.
 func NewInMemoryLayer() *InMemoryLayer {
 	layer := new(InMemoryLayer)
-	layer.users = make(map[uint64]model.User)
+	layer.users = make(map[uint64]model.UserLogin)
 	return layer
 }
 
 // AddUser adds a user to the data.
-func (l *InMemoryLayer) AddUser(u model.User) {
+func (l *InMemoryLayer) AddUser(u model.UserLogin) {
 	l.users[u.ID] = u
 }
 

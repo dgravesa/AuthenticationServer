@@ -6,24 +6,24 @@ import (
 	"strconv"
 )
 
-// User is a struct containing a user ID and password pair.
-type User struct {
+// UserLogin is a struct containing a user ID and password pair.
+type UserLogin struct {
 	ID       uint64
 	Password string
 }
 
-// ParseUser extracts a User from http request form values.
-func ParseUser(v *url.Values) (User, error) {
-	var u User
+// ParseUserLogin extracts a UserLogin from http request form values.
+func ParseUserLogin(v *url.Values) (UserLogin, error) {
+	var u UserLogin
 	var err error
 
 	// also errors in case of nil url values
 	if u.ID, err = ParseUID(v); err != nil {
-		return User{}, err
+		return UserLogin{}, err
 	}
 
 	if u.Password = v.Get("password"); u.Password == "" {
-		return User{}, fmt.Errorf("No password given")
+		return UserLogin{}, fmt.Errorf("No password given")
 	}
 
 	return u, nil

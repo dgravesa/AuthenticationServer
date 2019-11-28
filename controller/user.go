@@ -20,7 +20,7 @@ func userHandleFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func postUser(w http.ResponseWriter, r *http.Request) {
-	user, err := model.ParseUser(&r.Form)
+	user, err := model.ParseUserLogin(&r.Form)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

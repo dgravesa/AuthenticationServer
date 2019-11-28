@@ -2,7 +2,7 @@ package model
 
 // DataLayer is the interfacing layer between model logic and persistent data.
 type DataLayer interface {
-	AddUser(u User)
+	AddUser(u UserLogin)
 	DeleteUser(uid uint64)
 	UIDExists(uid uint64) bool
 }
@@ -15,7 +15,7 @@ func SetDataLayer(l DataLayer) {
 }
 
 // AddUser adds a user to the data.
-func AddUser(u User) {
+func AddUser(u UserLogin) {
 	dataLayer.AddUser(u)
 }
 
