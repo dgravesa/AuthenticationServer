@@ -46,7 +46,13 @@ func validatePostLoginResponse(res *httptest.ResponseRecorder, expecetedCode int
 	if res.Code != expecetedCode {
 		t.Errorf("expected status code = %d, received status code = %d", expecetedCode, res.Code)
 	}
-	// TODO test session in body if expected
+
+	_, err := model.DecodeSessionFromJSON(res.Result().Body)
+	receivedSession := (err == nil)
+
+	if receivedSession != expectSession {
+		t.Errorf("expected session = %t, received session = %t", expectSession, receivedSession)
+	}
 }
 
 func Test_postLogin_WithValidCredentials_ReturnsSession(t *testing.T) {
