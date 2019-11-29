@@ -37,6 +37,23 @@ func EncodeSessionToJSON(w io.Writer, s UserSession) {
 
 // DecodeSessionFromJSON reads a JSON-encoded session from r.
 func DecodeSessionFromJSON(r io.Reader) (UserSession, error) {
-	// TODO implement
-	return UserSession{}, fmt.Errorf("not yet implemented")
+	var session UserSession
+
+	var nillable struct {
+		UID *uint64 `json:"userId"`
+		Key *string `json:"key"`
+	}
+
+	dec := json.NewDecoder(r)
+	if err := dec.Decode(&nillable); err != nil {
+		return session, err
+	} else if nillable.UID == nil {
+		return session, fmt.Errorf("session JSON: missing \"userId\"")
+	} else if nillable.Key == nil {
+		return session, fmt.Errorf("session JSON: missing \"key\"")
+	}
+
+	session.UID = *nillable.UID
+	session.Key = *nillable.Key
+	return session, nil
 }
