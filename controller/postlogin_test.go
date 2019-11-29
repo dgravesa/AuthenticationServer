@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"os"
 	"testing"
 
 	"github.com/dgravesa/AuthenticationServer/data"
@@ -20,14 +19,12 @@ var validLogins = []model.UserLogin{
 	{43, "{[password]}:"},
 }
 
-func TestMain(m *testing.M) {
+func initValidLogins() {
 	model.SetDataLayer(data.NewInMemoryLayer())
 
 	for _, login := range validLogins {
 		model.AddUserLogin(login)
 	}
-
-	os.Exit(m.Run())
 }
 
 func newPostLoginRequest(l model.UserLogin) *http.Request {
@@ -53,11 +50,12 @@ func validatePostLoginResponse(res *httptest.ResponseRecorder, expecetedCode int
 }
 
 func Test_postLogin_WithValidCredentials_ReturnsSession(t *testing.T) {
+	// Arrange
+	initValidLogins()
 	expectedCode := http.StatusCreated
 	expectSession := true
 
 	for _, login := range validLogins {
-		// Arrange
 		req := newPostLoginRequest(login)
 		res := httptest.NewRecorder()
 
@@ -76,11 +74,12 @@ var fakeLogins = []model.UserLogin{
 }
 
 func Test_postLogin_WithInvalidCredentials_ReturnsUnauthorized(t *testing.T) {
+	// Arrange
+	initValidLogins()
 	expectedCode := http.StatusUnauthorized
 	expectSession := false
 
 	for _, fakeLogin := range fakeLogins {
-		// Arrange
 		req := newPostLoginRequest(fakeLogin)
 		res := httptest.NewRecorder()
 
@@ -94,6 +93,7 @@ func Test_postLogin_WithInvalidCredentials_ReturnsUnauthorized(t *testing.T) {
 
 func Test_postLogin_MissingPassword_ReturnsBadRequest(t *testing.T) {
 	// Arrange
+	initValidLogins()
 	expectedCode := http.StatusBadRequest
 	expectSession := false
 	req := newPostLoginRequest(model.UserLogin{512, ""})
@@ -108,6 +108,7 @@ func Test_postLogin_MissingPassword_ReturnsBadRequest(t *testing.T) {
 
 func Test_postLogin_MissingUID_ReturnsBadRequest(t *testing.T) {
 	// Arrange
+	initValidLogins()
 	expectedCode := http.StatusBadRequest
 	expectSession := false
 	req := newPostLoginRequest(model.UserLogin{0, "Password1"})

@@ -4,6 +4,7 @@ package model
 type DataLayer interface {
 	AddUserRecord(u UserRecord)
 	DeleteUserRecord(uid uint64)
+	UserRecordByID(uid uint64) (UserRecord, bool)
 	UIDExists(uid uint64) bool
 }
 
