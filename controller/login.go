@@ -11,7 +11,7 @@ func loginHandleFunc(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		postLogin(w, r)
 	case http.MethodDelete:
-		fallthrough // TODO implement
+		deleteLogin(w, r) // logout
 	default:
 		// TODO error
 	}
@@ -36,4 +36,20 @@ func postLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	model.EncodeSessionToJSON(w, session)
+}
+
+func deleteLogin(w http.ResponseWriter, r *http.Request) {
+	session, err := model.ParseSession(r.URL.Query())
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if !model.SessionExists(session) {
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		model.DeleteSession(session)
+		w.WriteHeader(http.StatusOK)
+	}
 }

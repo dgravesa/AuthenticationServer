@@ -4,6 +4,7 @@ package model
 type SessionDataLayer interface {
 	AddSession(s Session)
 	SessionExists(s Session) bool
+	DeleteSession(s Session)
 }
 
 var sessionDataLayer SessionDataLayer

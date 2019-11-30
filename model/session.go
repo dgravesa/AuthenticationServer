@@ -23,6 +23,11 @@ func SessionExists(s Session) bool {
 	return sessionDataLayer.SessionExists(s)
 }
 
+// DeleteSession removes a session from the data.
+func DeleteSession(s Session) {
+	sessionDataLayer.DeleteSession(s)
+}
+
 // ParseSession extracts a Session from http request query parameters.
 func ParseSession(v url.Values) (Session, error) {
 	var s Session
