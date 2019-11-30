@@ -15,17 +15,17 @@ type UserLogin struct {
 // AddUserLogin adds a user login to the data.
 func AddUserLogin(u UserLogin) {
 	ur := makeUserRecord(u)
-	dataLayer.AddUserRecord(ur)
+	userRecordDataLayer.AddUserRecord(ur)
 }
 
 // DeleteUserLogin removes the user login associated with the ID from the data.
 func DeleteUserLogin(uid uint64) {
-	dataLayer.DeleteUserRecord(uid)
+	userRecordDataLayer.DeleteUserRecord(uid)
 }
 
 // UIDExists returns true if the UID exists in the data for some user login, otherwise false.
 func UIDExists(uid uint64) bool {
-	return dataLayer.UIDExists(uid)
+	return userRecordDataLayer.UIDExists(uid)
 }
 
 // ParseUserLogin extracts a UserLogin from http request form values.

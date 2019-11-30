@@ -8,9 +8,9 @@ type UserRecordDataLayer interface {
 	UIDExists(uid uint64) bool
 }
 
-var dataLayer UserRecordDataLayer
+var userRecordDataLayer UserRecordDataLayer
 
 // SetUserRecordDataLayer sets the local data access layer for model logic.
 func SetUserRecordDataLayer(l UserRecordDataLayer) {
-	dataLayer = l
+	userRecordDataLayer = l
 }
