@@ -9,6 +9,6 @@ type UserRecord struct {
 
 func makeUserRecord(ul UserLogin) UserRecord {
 	salt := makeSalt()
-	hash := saltAndHash(ul.Password, salt)
+	hash := applySaltAndHash(ul.Password, salt)
 	return UserRecord{ul.ID, salt, hash}
 }

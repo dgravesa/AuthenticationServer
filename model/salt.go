@@ -14,7 +14,7 @@ func makeSalt() string {
 	return hex.EncodeToString(saltBytes)
 }
 
-func saltAndHash(in, salt string) string {
+func applySaltAndHash(in, salt string) string {
 	saltedStr := in + "." + salt
 	hashBytes := sha256.Sum256([]byte(saltedStr))
 	return hex.EncodeToString(hashBytes[:])

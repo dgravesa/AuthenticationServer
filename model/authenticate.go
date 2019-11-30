@@ -8,7 +8,7 @@ func AuthenticateUser(login UserLogin) (UserSession, bool) {
 		return UserSession{}, false
 	}
 
-	loginHash := saltAndHash(login.Password, record.Salt)
+	loginHash := applySaltAndHash(login.Password, record.Salt)
 	if loginHash != record.Hash {
 		return UserSession{}, false
 	}
