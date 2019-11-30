@@ -60,6 +60,7 @@ func validatePostUserResponse(in postUserInput, expectedCode, receivedCode int, 
 func Test_postUser_WithValidRequest_ReturnsSuccess(t *testing.T) {
 	expectedCode := http.StatusCreated
 	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
+	model.SetUserSessionDataLayer(data.NewInMemoryUserSessionLayer())
 
 	for _, in := range postUserValidRequestInput {
 		// Arrange
@@ -81,6 +82,7 @@ func Test_postUser_MissingUserIDField_ReturnsBadRequest(t *testing.T) {
 	// Arrange
 	expectedCode := http.StatusBadRequest
 	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
+	model.SetUserSessionDataLayer(data.NewInMemoryUserSessionLayer())
 	in := postUserInput{0, "password1"}
 	req := newPostUserRequest(in)
 	res := httptest.NewRecorder()
@@ -96,6 +98,7 @@ func Test_postUser_MissingPasswordField_ReturnsBadRequest(t *testing.T) {
 	// Arrange
 	expectedCode := http.StatusBadRequest
 	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
+	model.SetUserSessionDataLayer(data.NewInMemoryUserSessionLayer())
 	in := postUserInput{101, ""}
 	req := newPostUserRequest(in)
 	res := httptest.NewRecorder()
@@ -112,6 +115,7 @@ func Test_postUser_ExistingUserID_ReturnsConflict(t *testing.T) {
 	expectedCode1 := http.StatusCreated
 	expectedCode2 := http.StatusConflict
 	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
+	model.SetUserSessionDataLayer(data.NewInMemoryUserSessionLayer())
 	in1 := postUserInput{174, "password1"}
 	in2 := postUserInput{174, "password2"}
 	req1 := newPostUserRequest(in1)

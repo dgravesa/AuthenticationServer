@@ -13,5 +13,7 @@ func AuthenticateUser(login UserLogin) (UserSession, bool) {
 		return UserSession{}, false
 	}
 
-	return newSession(login.ID), true
+	session := newSession(login.ID)
+	userSessionDataLayer.AddSession(session)
+	return session, true
 }
