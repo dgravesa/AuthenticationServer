@@ -89,3 +89,36 @@ func Test_getValidate_WithInvalidSessionUID_ReturnsUnauthorized(t *testing.T) {
 		t.Errorf("expected status code = %d, received status code = %d", expectedCode, res.Code)
 	}
 }
+
+func Test_getValidate_WithDeletedSession_ReturnsUnauthorized(t *testing.T) {
+	// Arrange
+	expectedCode1 := http.StatusOK
+	expectedCode2 := http.StatusUnauthorized
+	initValidLogins()
+	for _, login := range validLogins {
+		_, _ = model.AuthenticateUser(login)
+	}
+	validLogin := validLogins[0]
+	validSession, loginSucceeded := model.AuthenticateUser(validLogin)
+	if !loginSucceeded {
+		t.Fatalf("unable to set up test for get validate; failed to log in with valid credentials")
+	}
+	req := newGetValidateRequest(validSession)
+	res1 := httptest.NewRecorder()
+	res2 := httptest.NewRecorder()
+
+	// Act
+	getValidate(res1, req)
+	model.DeleteSession(validSession)
+	getValidate(res2, req)
+
+	// Assert
+	if res1.Code != expectedCode1 {
+		t.Errorf("validate before session deleted: expected status code = %d, received status code = %d",
+			expectedCode1, res1.Code)
+	}
+	if res2.Code != expectedCode2 {
+		t.Errorf("validate after session deleted: expected status code = %d, received status code = %d",
+			expectedCode2, res2.Code)
+	}
+}
