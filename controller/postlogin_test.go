@@ -37,7 +37,7 @@ func newPostLoginRequest(l model.UserLogin) *http.Request {
 		f.Set("password", l.Password)
 	}
 
-	req := httptest.NewRequest("POST", "http://localhost/user", nil)
+	req := httptest.NewRequest("POST", "http://localhost/login", nil)
 	req.Form = f
 	return req
 }
