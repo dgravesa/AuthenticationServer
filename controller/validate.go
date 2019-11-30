@@ -16,7 +16,7 @@ func validateHandleFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func getValidate(w http.ResponseWriter, r *http.Request) {
-	session, err := model.ParseUserSession(r.URL.Query())
+	session, err := model.ParseSession(r.URL.Query())
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

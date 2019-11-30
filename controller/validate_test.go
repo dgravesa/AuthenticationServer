@@ -10,7 +10,7 @@ import (
 	"github.com/dgravesa/AuthenticationServer/model"
 )
 
-func newGetValidateRequest(s model.UserSession) *http.Request {
+func newGetValidateRequest(s model.Session) *http.Request {
 	req := httptest.NewRequest("GET", "http://localhost/validate", nil)
 	query := make(url.Values)
 	query.Set("userId", fmt.Sprint(s.UID))
@@ -49,7 +49,7 @@ func Test_getValidate_WithInvalidSessionKey_ReturnsUnauthorized(t *testing.T) {
 	if !loginSucceeded {
 		t.Fatalf("failed to create session prior to test")
 	}
-	invalidSession := model.UserSession{
+	invalidSession := model.Session{
 		UID: validSession.UID,
 		Key: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", // fake key
 	}
@@ -74,7 +74,7 @@ func Test_getValidate_WithInvalidSessionUID_ReturnsUnauthorized(t *testing.T) {
 	if !loginSucceeded {
 		t.Fatalf("failed to create session prior to test")
 	}
-	invalidSession := model.UserSession{
+	invalidSession := model.Session{
 		UID: 9099, // other user
 		Key: validSession.Key,
 	}

@@ -12,28 +12,28 @@ import (
 
 const sessionKeyLen = 32
 
-// UserSession is used for subsequent authentication when a user has successfully logged in.
-type UserSession struct {
+// Session is used for subsequent authentication when a user has successfully logged in.
+type Session struct {
 	UID uint64 `json:"userId"`
 	Key string `json:"key"`
 }
 
 // SessionExists returns true if the session is found in the data, otherwise false.
-func SessionExists(s UserSession) bool {
-	return userSessionDataLayer.SessionExists(s)
+func SessionExists(s Session) bool {
+	return sessionDataLayer.SessionExists(s)
 }
 
-// ParseUserSession extracts a UserSession from http request query parameters.
-func ParseUserSession(v url.Values) (UserSession, error) {
-	var s UserSession
+// ParseSession extracts a Session from http request query parameters.
+func ParseSession(v url.Values) (Session, error) {
+	var s Session
 	var err error
 
 	if s.UID, err = strconv.ParseUint(v.Get("userId"), 10, 64); err != nil {
-		return UserSession{}, err
+		return Session{}, err
 	}
 
 	if s.Key = v.Get("key"); s.Key == "" {
-		return UserSession{}, fmt.Errorf("No key given")
+		return Session{}, fmt.Errorf("No key given")
 	}
 
 	return s, nil
@@ -45,22 +45,22 @@ func makeSessionKey() string {
 	return hex.EncodeToString(keyBytes)
 }
 
-func newSession(uid uint64) UserSession {
-	return UserSession{
+func newSession(uid uint64) Session {
+	return Session{
 		UID: uid,
 		Key: makeSessionKey(),
 	}
 }
 
 // EncodeSessionToJSON writes a JSON-encoded session to w.
-func EncodeSessionToJSON(w io.Writer, s UserSession) {
+func EncodeSessionToJSON(w io.Writer, s Session) {
 	enc := json.NewEncoder(w)
 	enc.Encode(s)
 }
 
 // DecodeSessionFromJSON reads a JSON-encoded session from r.
-func DecodeSessionFromJSON(r io.Reader) (UserSession, error) {
-	var session UserSession
+func DecodeSessionFromJSON(r io.Reader) (Session, error) {
+	var session Session
 
 	var nillable struct {
 		UID *uint64 `json:"userId"`
