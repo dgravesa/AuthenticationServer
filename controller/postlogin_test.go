@@ -43,9 +43,9 @@ func newPostLoginRequest(l model.UserLogin) *http.Request {
 	return req
 }
 
-func validatePostLoginResponse(res *httptest.ResponseRecorder, expecetedCode int, expectSession bool, t *testing.T) {
-	if res.Code != expecetedCode {
-		t.Errorf("expected status code = %d, received status code = %d", expecetedCode, res.Code)
+func validatePostLoginResponse(res *httptest.ResponseRecorder, expectedCode int, expectSession bool, t *testing.T) {
+	if res.Code != expectedCode {
+		t.Errorf("expected status code = %d, received status code = %d", expectedCode, res.Code)
 	}
 
 	_, err := model.DecodeSessionFromJSON(res.Result().Body)
