@@ -20,7 +20,7 @@ func userHandleFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func postUser(w http.ResponseWriter, r *http.Request) {
-	user, err := model.ParseUserLogin(&r.Form)
+	user, err := model.ParseUserLogin(r.Form)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -38,7 +38,7 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
-	uid, err := model.ParseUID(&r.Form)
+	uid, err := model.ParseUID(r.Form)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

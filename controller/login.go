@@ -18,7 +18,7 @@ func loginHandleFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func postLogin(w http.ResponseWriter, r *http.Request) {
-	login, err := model.ParseUserLogin(&r.Form)
+	login, err := model.ParseUserLogin(r.Form)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

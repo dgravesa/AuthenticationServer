@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
+	"strconv"
 )
 
 const sessionKeyLen = 32
@@ -19,6 +21,22 @@ type UserSession struct {
 // SessionExists returns true if the session is found in the data, otherwise false.
 func SessionExists(s UserSession) bool {
 	return userSessionDataLayer.SessionExists(s)
+}
+
+// ParseUserSession extracts a UserSession from http request query parameters.
+func ParseUserSession(v url.Values) (UserSession, error) {
+	var s UserSession
+	var err error
+
+	if s.UID, err = strconv.ParseUint(v.Get("userId"), 10, 64); err != nil {
+		return UserSession{}, err
+	}
+
+	if s.Key = v.Get("key"); s.Key == "" {
+		return UserSession{}, fmt.Errorf("No key given")
+	}
+
+	return s, nil
 }
 
 func makeSessionKey() string {

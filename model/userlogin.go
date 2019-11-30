@@ -29,7 +29,7 @@ func UIDExists(uid uint64) bool {
 }
 
 // ParseUserLogin extracts a UserLogin from http request form values.
-func ParseUserLogin(v *url.Values) (UserLogin, error) {
+func ParseUserLogin(v url.Values) (UserLogin, error) {
 	var u UserLogin
 	var err error
 
@@ -46,13 +46,9 @@ func ParseUserLogin(v *url.Values) (UserLogin, error) {
 }
 
 // ParseUID extracts a user ID from http request form values.
-func ParseUID(v *url.Values) (uint64, error) {
+func ParseUID(v url.Values) (uint64, error) {
 	var uid uint64
 	var err error
-
-	if v == nil {
-		return 0, fmt.Errorf("No form data given")
-	}
 
 	if uid, err = strconv.ParseUint(v.Get("userid"), 10, 64); err != nil {
 		return 0, err

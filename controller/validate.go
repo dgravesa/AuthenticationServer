@@ -1,6 +1,10 @@
 package controller
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/dgravesa/AuthenticationServer/model"
+)
 
 func validateHandleFunc(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -12,5 +16,16 @@ func validateHandleFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func getValidate(w http.ResponseWriter, r *http.Request) {
-	// TODO implement
+	session, err := model.ParseUserSession(r.URL.Query())
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if model.SessionExists(session) {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		w.WriteHeader(http.StatusUnauthorized)
+	}
 }
