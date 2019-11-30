@@ -47,7 +47,7 @@ func Test_deleteUser_OnExistingUser_ReturnsSuccess(t *testing.T) {
 	expectedCode := http.StatusOK
 	var uidToDelete uint64 = 4765
 	var uidToPersist uint64 = 5167
-	model.SetDataLayer(data.NewInMemoryLayer())
+	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
 	model.AddUserLogin(model.UserLogin{uidToDelete, "Password1"})
 	model.AddUserLogin(model.UserLogin{uidToPersist, "Password2"})
 	if !model.UIDExists(uidToDelete) {
@@ -78,7 +78,7 @@ func Test_deleteUser_OnNonexistentUser_ReturnsNotFound(t *testing.T) {
 	expectedCode := http.StatusNotFound
 	var uidToPersist uint64 = 151899
 	var uidToDelete uint64 = 444125
-	model.SetDataLayer(data.NewInMemoryLayer())
+	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
 	model.AddUserLogin(model.UserLogin{uidToPersist, "PasswordExistingUser"})
 	if !model.UIDExists(uidToPersist) {
 		t.Fatalf("failed to add persistent uid prior to test")
@@ -100,7 +100,7 @@ func Test_deleteUser_OnNonexistentUser_ReturnsNotFound(t *testing.T) {
 func Test_deleteUser_MissingUserID_ReturnsBadRequest(t *testing.T) {
 	// Arrange
 	expectedCode := http.StatusBadRequest
-	model.SetDataLayer(data.NewInMemoryLayer())
+	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
 	in := deleteUserInput{0}
 	req := newDeleteUserRequest(in)
 	res := httptest.NewRecorder()

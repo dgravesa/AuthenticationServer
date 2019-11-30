@@ -20,7 +20,7 @@ var validLogins = []model.UserLogin{
 }
 
 func initValidLogins() {
-	model.SetDataLayer(data.NewInMemoryLayer())
+	model.SetUserRecordDataLayer(data.NewInMemoryUserRecordLayer())
 
 	for _, login := range validLogins {
 		model.AddUserLogin(login)
