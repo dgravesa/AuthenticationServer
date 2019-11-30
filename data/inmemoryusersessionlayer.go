@@ -16,3 +16,13 @@ func NewInMemoryUserSessionLayer() *InMemoryUserSessionLayer {
 func (l *InMemoryUserSessionLayer) AddSession(s model.UserSession) {
 	l.sessions = append(l.sessions, s)
 }
+
+// SessionExists returns true if the session is found in the data, otherwise false.
+func (l *InMemoryUserSessionLayer) SessionExists(s model.UserSession) bool {
+	for _, dataSession := range l.sessions {
+		if s.UID == dataSession.UID && s.Key == dataSession.Key {
+			return true
+		}
+	}
+	return false
+}

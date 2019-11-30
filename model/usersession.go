@@ -16,6 +16,11 @@ type UserSession struct {
 	Key string `json:"key"`
 }
 
+// SessionExists returns true if the session is found in the data, otherwise false.
+func SessionExists(s UserSession) bool {
+	return userSessionDataLayer.SessionExists(s)
+}
+
 func makeSessionKey() string {
 	keyBytes := make([]byte, sessionKeyLen)
 	rand.Read(keyBytes)
