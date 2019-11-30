@@ -4,7 +4,7 @@ import (
 	"github.com/dgravesa/AuthenticationServer/model"
 )
 
-// InMemoryUserRecordLayer provides a data store in memory.
+// InMemoryUserRecordLayer provides a data store in memory for user records.
 type InMemoryUserRecordLayer struct {
 	users map[uint64]model.UserRecord
 }

@@ -1,6 +1,6 @@
 package model
 
-// UserRecordDataLayer is the interfacing layer between model logic and persistent data.
+// UserRecordDataLayer is the interfacing layer between model logic and persistent data for user records.
 type UserRecordDataLayer interface {
 	AddUserRecord(u UserRecord)
 	DeleteUserRecord(uid uint64)
