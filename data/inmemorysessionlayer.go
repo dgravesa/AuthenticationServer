@@ -27,6 +27,15 @@ func (l *InMemorySessionLayer) DeleteSession(s model.Session) {
 	}
 }
 
+// DeleteAllByUID removes all sessions associated with a particular user ID from the data store.
+func (l *InMemorySessionLayer) DeleteAllByUID(uid uint64) {
+	for i, session := range l.sessions {
+		if uid == session.UID {
+			l.sessions = append(l.sessions[:i], l.sessions[i+1:]...)
+		}
+	}
+}
+
 // SessionExists returns true if the session is found in the data, otherwise false.
 func (l *InMemorySessionLayer) SessionExists(s model.Session) bool {
 	for _, dataSession := range l.sessions {

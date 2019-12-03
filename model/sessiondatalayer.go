@@ -5,6 +5,7 @@ type SessionDataLayer interface {
 	AddSession(s Session)
 	SessionExists(s Session) bool
 	DeleteSession(s Session)
+	DeleteAllByUID(uid uint64)
 }
 
 var sessionDataLayer SessionDataLayer

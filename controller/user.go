@@ -50,6 +50,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		// TODO respond with error message
 	} else {
+		model.DeleteAllSessionsByUID(uid)
 		model.DeleteUserLogin(uid)
 		w.WriteHeader(http.StatusOK)
 	}
@@ -68,6 +69,7 @@ func putUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusNotFound)
 		// TODO respond with error message
 	} else {
+		model.DeleteAllSessionsByUID(user.ID)
 		model.UpdateUserLogin(user.ID, user.Password)
 		w.WriteHeader(http.StatusOK)
 	}

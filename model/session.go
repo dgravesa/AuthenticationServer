@@ -28,6 +28,11 @@ func DeleteSession(s Session) {
 	sessionDataLayer.DeleteSession(s)
 }
 
+// DeleteAllSessionsByUID removes all sessions associated with a particular user ID from the data.
+func DeleteAllSessionsByUID(uid uint64) {
+	sessionDataLayer.DeleteAllByUID(uid)
+}
+
 // ParseSession extracts a Session from http request query parameters.
 func ParseSession(v url.Values) (Session, error) {
 	var s Session
