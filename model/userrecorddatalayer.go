@@ -4,6 +4,7 @@ package model
 type UserRecordDataLayer interface {
 	AddUserRecord(u UserRecord)
 	DeleteUserRecord(uid uint64)
+	UpdateUserRecord(u UserRecord)
 	UserRecordByID(uid uint64) (UserRecord, bool)
 	UIDExists(uid uint64) bool
 }

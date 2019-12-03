@@ -13,7 +13,7 @@ func userHandleFunc(w http.ResponseWriter, r *http.Request) {
 	case http.MethodDelete:
 		deleteUser(w, r)
 	case http.MethodPut:
-		fallthrough // TODO implement
+		putUser(w, r)
 	default:
 		// TODO error
 	}
@@ -51,6 +51,24 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 		// TODO respond with error message
 	} else {
 		model.DeleteUserLogin(uid)
+		w.WriteHeader(http.StatusOK)
+	}
+}
+
+func putUser(w http.ResponseWriter, r *http.Request) {
+	user, err := model.ParseUserLogin(r.Form)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		// TODO respond with error message
+		return
+	}
+
+	if !model.UIDExists(user.ID) {
+		w.WriteHeader(http.StatusNotFound)
+		// TODO respond with error message
+	} else {
+		model.UpdateUserLogin(user.ID, user.Password)
 		w.WriteHeader(http.StatusOK)
 	}
 }

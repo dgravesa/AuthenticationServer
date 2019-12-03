@@ -23,6 +23,12 @@ func DeleteUserLogin(uid uint64) {
 	userRecordDataLayer.DeleteUserRecord(uid)
 }
 
+// UpdateUserLogin updates a user password if the user exists.
+func UpdateUserLogin(uid uint64, password string) {
+	ur := makeUserRecord(UserLogin{ID: uid, Password: password})
+	userRecordDataLayer.UpdateUserRecord(ur)
+}
+
 // UIDExists returns true if the UID exists in the data for some user login, otherwise false.
 func UIDExists(uid uint64) bool {
 	return userRecordDataLayer.UIDExists(uid)

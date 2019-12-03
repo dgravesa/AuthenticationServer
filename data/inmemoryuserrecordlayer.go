@@ -26,6 +26,13 @@ func (l *InMemoryUserRecordLayer) DeleteUserRecord(uid uint64) {
 	delete(l.users, uid)
 }
 
+// UpdateUserRecord updates a user record if it exists.
+func (l *InMemoryUserRecordLayer) UpdateUserRecord(u model.UserRecord) {
+	if l.UIDExists(u.ID) {
+		l.users[u.ID] = u
+	}
+}
+
 // UserRecordByID returns the corresponding user record and true if the ID exists,
 // otherwise a zeroed UserRecord and false.
 func (l *InMemoryUserRecordLayer) UserRecordByID(uid uint64) (model.UserRecord, bool) {
