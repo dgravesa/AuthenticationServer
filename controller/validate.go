@@ -11,7 +11,7 @@ func validateHandleFunc(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		getValidate(w, r)
 	default:
-		// TODO error
+		w.WriteHeader(http.StatusNotImplemented)
 	}
 }
 

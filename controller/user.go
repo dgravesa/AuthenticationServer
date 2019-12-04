@@ -15,7 +15,7 @@ func userHandleFunc(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPut:
 		putUser(w, r)
 	default:
-		// TODO error
+		w.WriteHeader(http.StatusNotImplemented)
 	}
 }
 
@@ -24,13 +24,11 @@ func postUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		// TODO respond with error message
 		return
 	}
 
 	if model.UIDExists(user.ID) {
 		w.WriteHeader(http.StatusConflict)
-		// TODO respond with error message
 	} else {
 		model.AddUserLogin(user)
 		w.WriteHeader(http.StatusCreated)
@@ -42,13 +40,11 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		// TODO respond with error message
 		return
 	}
 
 	if !model.UIDExists(uid) {
 		w.WriteHeader(http.StatusNotFound)
-		// TODO respond with error message
 	} else {
 		model.DeleteAllSessionsByUID(uid)
 		model.DeleteUserLogin(uid)
@@ -61,13 +57,11 @@ func putUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		// TODO respond with error message
 		return
 	}
 
 	if !model.UIDExists(user.ID) {
 		w.WriteHeader(http.StatusNotFound)
-		// TODO respond with error message
 	} else {
 		model.DeleteAllSessionsByUID(user.ID)
 		model.UpdateUserLogin(user.ID, user.Password)

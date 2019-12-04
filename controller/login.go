@@ -13,7 +13,7 @@ func loginHandleFunc(w http.ResponseWriter, r *http.Request) {
 	case http.MethodDelete:
 		deleteLogin(w, r) // logout
 	default:
-		// TODO error
+		w.WriteHeader(http.StatusNotImplemented)
 	}
 }
 
@@ -22,7 +22,6 @@ func postLogin(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		// TODO respond with error message
 		return
 	}
 
