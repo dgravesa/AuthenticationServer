@@ -122,3 +122,42 @@ func Test_getValidate_WithDeletedSession_ReturnsUnauthorized(t *testing.T) {
 			expectedCode2, res2.Code)
 	}
 }
+
+// TODO: consider moving more stateful, functional tests like this to a component test tier.
+func Test_getValidate_OnSessionAfterPasswordChange_ReturnsUnauthorized(t *testing.T) {
+	// Arrange
+	expectedCodeBefore := http.StatusOK
+	expectedCodePutUser := http.StatusOK
+	expectedCodeAfter := http.StatusUnauthorized
+	initValidLogins()
+	oldLogin := validLogins[0]
+	oldSession, loginSucceeded := model.AuthenticateUser(oldLogin)
+	if !loginSucceeded {
+		t.Fatalf("unable to set up test for get validate; failed to log in with valid credentials")
+	}
+	req := newGetValidateRequest(oldSession)
+	resBefore := httptest.NewRecorder()
+	resPutUser := httptest.NewRecorder()
+	resAfter := httptest.NewRecorder()
+	newLogin := model.UserLogin{ID: oldLogin.ID, Password: "newP@ssw0rd"}
+	putUserReq := newPutUserRequest(newLogin)
+
+	// Act
+	getValidate(resBefore, req)
+	putUser(resPutUser, putUserReq)
+	getValidate(resAfter, req)
+
+	// Assert
+	if resBefore.Code != expectedCodeBefore {
+		t.Errorf("validate before login changed: expected status code = %d, received status code = %d",
+			expectedCodeBefore, resBefore.Code)
+	}
+	if resPutUser.Code != expectedCodePutUser {
+		t.Errorf("error on login change request: expected status code = %d, received status code = %d",
+			expectedCodePutUser, resPutUser.Code)
+	}
+	if resAfter.Code != expectedCodeAfter {
+		t.Errorf("validate before login changed: expected status code = %d, received status code = %d",
+			expectedCodeAfter, resAfter.Code)
+	}
+}
