@@ -12,11 +12,11 @@ import (
 )
 
 var validLogins = []model.UserLogin{
-	{512, "Password1"},
-	{512136, "<>LL$#rT^6"},
-	{9099, "qwrty$@@!..;"},
-	{12371, "5215"},
-	{43, "{[password]}:"},
+	{ID: 512, Password: "Password1"},
+	{ID: 512136, Password: "<>LL$#rT^6"},
+	{ID: 9099, Password: "qwrty$@@!..;"},
+	{ID: 12371, Password: "5215"},
+	{ID: 43, Password: "{[password]}:"},
 }
 
 func initValidLogins() {
@@ -75,9 +75,9 @@ func Test_postLogin_WithValidCredentials_ReturnsSession(t *testing.T) {
 }
 
 var fakeLogins = []model.UserLogin{
-	{511, "Password1"},
-	{512136, "NotPassword"},
-	{315, "&(*dggr$E#"},
+	{ID: 511, Password: "Password1"},
+	{ID: 512136, Password: "NotPassword"},
+	{ID: 315, Password: "&(*dggr$E#"},
 }
 
 func Test_postLogin_WithInvalidCredentials_ReturnsUnauthorized(t *testing.T) {
@@ -103,7 +103,7 @@ func Test_postLogin_MissingPassword_ReturnsBadRequest(t *testing.T) {
 	initValidLogins()
 	expectedCode := http.StatusBadRequest
 	expectSession := false
-	req := newPostLoginRequest(model.UserLogin{512, ""})
+	req := newPostLoginRequest(model.UserLogin{ID: 512, Password: ""})
 	res := httptest.NewRecorder()
 
 	// Act
@@ -118,7 +118,7 @@ func Test_postLogin_MissingUID_ReturnsBadRequest(t *testing.T) {
 	initValidLogins()
 	expectedCode := http.StatusBadRequest
 	expectSession := false
-	req := newPostLoginRequest(model.UserLogin{0, "Password1"})
+	req := newPostLoginRequest(model.UserLogin{ID: 0, Password: "Password1"})
 	res := httptest.NewRecorder()
 
 	// Act
