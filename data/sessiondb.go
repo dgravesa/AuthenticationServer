@@ -32,22 +32,23 @@ func NewSessionDB(cfg dbserver.Config) (*SessionDB, error) {
 }
 
 // AddSession adds s to the database.
-func AddSession(s model.Session) {
-	// TODO implement
+func (l *SessionDB) AddSession(s model.Session) {
+	l.db.Exec(sessionDBInsertSessionQuery, s.UID, s.Key)
 }
 
 // SessionExists returns true if s exists in the database, otherwise false.
-func SessionExists(s model.Session) bool {
-	// TODO implement
-	return false
+func (l *SessionDB) SessionExists(s model.Session) bool {
+	var found bool
+	l.db.QueryRow(sessionDBFindSessionQuery, s.UID, s.Key).Scan(&found)
+	return found
 }
 
 // DeleteSession deletes s if it exists in the database.
-func DeleteSession(s model.Session) {
-	// TODO implement
+func (l *SessionDB) DeleteSession(s model.Session) {
+	l.db.Exec(sessionDBDeleteSessionQuery, s.UID, s.Key)
 }
 
 // DeleteAllByUID deletes all sessions associated with uid.
-func DeleteAllByUID(uid uint64) {
-	// TODO implement
+func (l *SessionDB) DeleteAllByUID(uid uint64) {
+	l.db.Exec(sessionDBDeleteAllSessionsByUIDQuery, uid)
 }
